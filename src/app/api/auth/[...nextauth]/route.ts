@@ -1,11 +1,10 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
-// 驗證邏輯寫在這
 export const authOptions = {
   providers: [
     CredentialsProvider({
-      name: "credentials",
+      name: "Credentials",
       credentials: {
         username: { label: "Username", type: "text" },
         password: { label: "Password", type: "password" },
@@ -35,7 +34,7 @@ export const authOptions = {
   },
 };
 
-// ✅ 必須 export default 為 route handler 給 Next.js 用！
+// ✅ 將 handler 匯出為 GET 與 POST 給 Next.js 認得
 const handler = NextAuth(authOptions);
 export { handler as GET, handler as POST };
 
