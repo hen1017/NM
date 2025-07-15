@@ -1,7 +1,8 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
-export const authOptions = {
+// ✅ 登入邏輯放這裡
+const authOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -34,7 +35,7 @@ export const authOptions = {
   },
 };
 
-// ✅ 將 handler 匯出為 GET 與 POST 給 Next.js 認得
+// ✅ 這才是 Next.js API route 要求的格式：**僅 export handler**
 const handler = NextAuth(authOptions);
 export { handler as GET, handler as POST };
 
