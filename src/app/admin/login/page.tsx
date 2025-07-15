@@ -2,52 +2,37 @@
 
 import { signIn } from "next-auth/react";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const router = useRouter();
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleLogin = async () => {
     const res = await signIn("credentials", {
-      redirect: true,
+      redirect: false,
       username,
       password,
-      callbackUrl: "/admin/dashboard", // 成功登入後導向的位置（可自訂）
     });
 
-    if (res?.error) {
-      setError("帳號或密碼錯誤");
+    if (res?.ok) {
+      router.push("/admin/dashboard");
+    } else {
+      alert("登入失敗，請確認帳密");
     }
   };
 
   return (
-    <div style={{ padding: '2rem', fontFamily: 'sans-serif' }}>
+    <main style={{ padding: '2rem', fontFamily: 'sans-serif' }}>
       <h1>後台登入</h1>
-      <form onSubmit={handleLogin}>
-        <label>
-          帳號：
-          <input
-            type="text"
-            value={username}
-            onChange={e => setUsername(e.target.value)}
-          />
-        </label>
-        <br /><br />
-        <label>
-          密碼：
-          <input
-            type="password"
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-          />
-        </label>
-        <br /><br />
-        <button type="submit">登入</button>
-      </form>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-    </div>
+      <p>帳號：</p>
+      <input value={username} onChange={(e) => setUsername(e.target.value)} />
+      <p>密碼：</p>
+      <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+      <br />
+      <button onClick={handleLogin}>登入</button>
+    </main>
   );
 }
 
