@@ -8,14 +8,11 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
 
   const handleLogin = async () => {
-    const res = await signIn('credentials', {
+    await signIn('credentials', {
       username,
       password,
-      redirect: true,
       callbackUrl: '/admin/dashboard',
     });
-
-    // signIn 預設會自動跳轉
   };
 
   return (
