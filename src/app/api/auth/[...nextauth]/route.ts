@@ -33,5 +33,3 @@ const handler = NextAuth(authOptions);
 
 // 導出 handler 和 authOptions
 export { handler as GET, handler as POST };
-export { authOptions };
-
