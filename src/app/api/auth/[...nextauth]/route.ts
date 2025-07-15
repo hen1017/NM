@@ -1,7 +1,8 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
-const handler = NextAuth({
+// 把 NextAuth 的設定定義為 authOptions
+export const authOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -25,7 +26,12 @@ const handler = NextAuth({
     strategy: "jwt",
   },
   secret: process.env.NEXTAUTH_SECRET || "secret-key",
-});
+};
 
+// 把 NextAuth 設定套用給 handler
+const handler = NextAuth(authOptions);
+
+// 導出 handler 和 authOptions
 export { handler as GET, handler as POST };
+export { authOptions };
 
