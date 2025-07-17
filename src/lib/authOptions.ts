@@ -1,3 +1,4 @@
+import { Session } from "next-auth"; // ✅ 新增這一行
 import CredentialsProvider from "next-auth/providers/credentials";
 
 export const authOptions = {
@@ -23,8 +24,10 @@ export const authOptions = {
     signIn: "/admin/login",
   },
   callbacks: {
-    async session({ session, token }) {
-      session.user.id = token.sub;
+    async session({ session, token }: { session: Session; token: any }) {
+      if (session.user) {
+        session.user.id = token.sub as string;
+      }
       return session;
     },
   },
