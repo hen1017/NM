@@ -1,5 +1,6 @@
-import { Session } from "next-auth"; // ✅ 新增這一行
 import CredentialsProvider from "next-auth/providers/credentials";
+import { Session } from "next-auth";         // ✅ 新增這行
+import { JWT } from "next-auth/jwt";         // ✅ 新增這行
 
 export const authOptions = {
   providers: [
@@ -10,10 +11,7 @@ export const authOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        if (
-          credentials?.username === "Hank" &&
-          credentials?.password === "1234"
-        ) {
+        if (credentials?.username === "Hank" && credentials?.password === "1234") {
           return { id: "1", name: "管理員" };
         }
         return null;
@@ -24,7 +22,7 @@ export const authOptions = {
     signIn: "/admin/login",
   },
   callbacks: {
-    async session({ session, token }: { session: Session; token: any }) {
+    async session({ session, token }: { session: Session; token: JWT }) {
       if (session.user) {
         session.user.id = token.sub as string;
       }
