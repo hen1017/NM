@@ -1,8 +1,7 @@
-import CredentialsProvider from "next-auth/providers/credentials";
-import { Session } from "next-auth";         // ✅ 新增這行
-import { JWT } from "next-auth/jwt";         // ✅ 新增這行
+import type { AuthOptions } from "next-auth"
+import CredentialsProvider from "next-auth/providers/credentials"
 
-export const authOptions = {
+export const authOptions: AuthOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -11,23 +10,33 @@ export const authOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        if (credentials?.username === "Hank" && credentials?.password === "1234") {
-          return { id: "1", name: "管理員" };
+        // 這裡放你的驗證邏輯
+        const user = {
+          id: "1",
+          name: "admin",
+          email: "admin@example.com",
         }
-        return null;
+
+        // 若驗證失敗 return null
+        if (credentials?.username !== "admin" || credentials?.password !== "1234") {
+          return null
+        }
+
+        return user
       },
     }),
   ],
-  pages: {
-    signIn: "/admin/login",
-  },
   callbacks: {
-    async session({ session, token }: { session: Session; token: JWT }) {
+    async jwt({ token, user }) {
+      if (user) token.sub = user.id
+      return token
+    },
+    async session({ session, token }) {
       if (session.user) {
-        session.user.id = token.sub as string;
+        session.user.id = token.sub as string
       }
-      return session;
+      return session
     },
   },
-};
+}
 
