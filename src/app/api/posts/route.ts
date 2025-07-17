@@ -1,17 +1,13 @@
-import { NextResponse } from "next/server";
+import { NextResponse } from 'next/server'
 
 export async function POST(req: Request) {
-  const body = await req.json();
+  const body = await req.json()
+  console.log("✅ 接收到文章：", body)
 
-  console.log("Received post:", body);
-
-  // 模擬儲存資料成功
-  return NextResponse.json(
-    {
-      message: "Post created",
-      post: body,
-    },
-    { status: 201 }
-  );
+  // 模擬儲存成功
+  return NextResponse.json({
+    message: "文章儲存成功",
+    post: body,
+  }, { status: 201 })
 }
 
