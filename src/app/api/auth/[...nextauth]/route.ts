@@ -38,4 +38,5 @@ const authOptions = {
 // ✅ 這才是 Next.js API route 要求的格式：**僅 export handler**
 const handler = NextAuth(authOptions);
 export { handler as GET, handler as POST };
+export { authOptions };
 
