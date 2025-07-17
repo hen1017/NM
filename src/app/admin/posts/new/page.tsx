@@ -1,30 +1,34 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState } from 'react';
 
 export default function NewPostPage() {
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const router = useRouter();
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [message, setMessage] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const res = await fetch("/api/posts", {
-      method: "POST",
+    if (!title || !content) {
+      setMessage('請填寫標題和內文');
+      return;
+    }
+
+    const res = await fetch('/api/posts', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({ title, content }),
     });
 
     if (res.ok) {
-      const result = await res.json();
-      console.log("Post created:", result);
-      router.push("/admin/dashboard");
+      setMessage('✅ 文章已成功送出');
+      setTitle('');
+      setContent('');
     } else {
-      alert("Failed to create post");
+      setMessage('❌ 發生錯誤，請稍後再試');
     }
   };
 
@@ -51,6 +55,7 @@ export default function NewPostPage() {
         </div>
         <button type="submit">送出</button>
       </form>
+      {message && <p>{message}</p>}
     </div>
   );
 }
