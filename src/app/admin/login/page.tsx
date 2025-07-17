@@ -1,28 +1,35 @@
-'use client';
+"use client";
 
-import { signIn } from 'next-auth/react';
-import { useState } from 'react';
+import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
+import { FormEvent, useState } from "react";
 
 export default function LoginPage() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [user, setUser] = useState("");
+  const [pw, setPw] = useState("");
+  const router = useRouter();
 
-  const handleLogin = async () => {
-    const res = await signIn('credentials', {
-      username,
-      password,
-      redirect: true,
-      callbackUrl: '/admin/dashboard',
+  async function onSubmit(e: FormEvent) {
+    e.preventDefault();
+    const result = await signIn("credentials", {
+      redirect: false,
+      username: user,
+      password: pw,
     });
-  };
+    if (result?.ok) {
+      router.push("/admin/dashboard");
+    } else {
+      alert("登入失敗");
+    }
+  }
 
   return (
-    <div style={{ padding: '2rem', fontFamily: 'sans-serif', color: 'white' }}>
+    <form onSubmit={onSubmit}>
       <h1>後台登入</h1>
-      <p>帳號：<input type="text" value={username} onChange={e => setUsername(e.target.value)} /></p>
-      <p>密碼：<input type="password" value={password} onChange={e => setPassword(e.target.value)} /></p>
-      <button onClick={handleLogin}>登入</button>
-    </div>
+      <label>帳號：<input value={user} onChange={e => setUser(e.target.value)} /></label>
+      <label>密碼：<input type="password" value={pw} onChange={e => setPw(e.target.value)} /></label>
+      <button type="submit">送出</button>
+    </form>
   );
 }
 

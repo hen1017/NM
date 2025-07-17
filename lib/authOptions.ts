@@ -29,7 +29,7 @@ export const authOptions: AuthOptions = {
       return token;
     },
     async session({ session, token }) {
-      session.user = token.user as any;
+      session.user = token.user as any;  // 如果要更严格，可以自行声明类型
       return session;
     },
   },
